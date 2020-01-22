@@ -26,27 +26,27 @@
         <ul>
           <li class="js-btn selected">Start</li>
           <li class="js-btn">Symulacja</li>
-		  <li class="js-btn">Opisy zmiennych i klas</li>
+		  <li class="js-btn">Definicja zmiennych i klas</li>
         </ul>
       </aside>
       <article class="doc__content">
         <section class="js-section">
           <h3 class="section__title">Start</h3>
-          <p>1)Po instalacji środowiska następny krok to pobranie projektu z githuba i przełączenie się na odpowiedni branch.</p>
+          <p>1)Najpierw należało przeprowadzić instalację środowiska a następnie pobrać projekt z repozytorium GitHub.</p>
 		  <code class="tab__pane active linux">$  git clone https://github.com/radziop/MPT_2019.git</code>
 		  <code class="tab__pane active linux">$  git checkout dev_DDoS</code>
-		  <p>2)Następnie musimy uruchomić środowisko Eclipse i utworzyć nowe Workspace i zaimportować projekt.</p>
+		  <p>2) Uruchomiono środowisko Eclipse i utworzono nowy "Workspace". Zaimportowano projekt.</p>
 		  -File --> Import --> General --> Existing Projects into Workspace<br>
-		  -Kliknąć na Browse obok Select root directory i znaleźć katalog do którego wypakowaliśmy projekt z dev_DDoS.<br>
-		  -W oknie projects zaznaczyć Floodlight<br>
-		  -Kliknąć przycisk Finish a projekt zostanie zaimportowany<br>
-		  <p>3)Następnie musimy zbudować i uruchomić projekt w srodowisku Eclipse</p>
-		  -Z menu na górze --> Run--> Run Configurations<br>
-		  -Prawym przyciskiem myszy wybrać Java Application --> New<br>
-		  -W polu nazwy wpisać FloodlightLaunch<br>
-		  -W polu Project wybrać Floodlight<br>
-		  -W polu Main Class wybrać net.floodlightcontroller.core.Main<br>
-		  -Kliknąć przycisk Apply i Run<br>
+		  -Następnie w Select root directory należało wybrać katalog w którym zapisano pobrany projekt.<br>
+		  -W oknie Projects zaznaczano Floodlight<br>
+		  -Po przyciśnięciu klawisza "Finish", projekt został zaimportowany<br>
+		  <p>3)Następnie zbudowano i uruchomiono projekt w srodowisku Eclipse</p>
+		  -Z menu wybrano Run--> Run Configurations<br>
+		  -Prawym przyciskiem myszy wybrano Java Application --> New<br>
+		  -W polu nazwy wpisano FloodlightLaunch<br>
+		  -W polu Project wybrano Floodlight<br>
+		  -W polu Main Class wybrano net.floodlightcontroller.core.Main<br>
+		  -Apply i Run<br>
           <h3 class="section__title">Topologia</h3>
           <div class="code__block code__block--notabs">
       <pre>
@@ -74,12 +74,12 @@ class MyTopo_ddos(Topo):
         attackerHost1 = self.addHost('ah1') #ATAKUJĄCY 1
         attackerHost2 = self.addHost('ah2') #ATAKUJĄCY 2
         attackerHost3 = self.addHost('ah3') #ATAKUJĄCY 3
-        switch = self.addSwitch('s1')		#SWITCH
+        switch = self.addSwitch('s1')		#PRZEŁĄCZNIK
         clientHost1 = self.addHost('ch')	#KLIENT 1
         clientHost2 = self.addHost('ch2')	#KLIENT 2
         # Add links
-        self.addLink(wwwServer,switch,bw=10)	#Połączenie między serwerem WWW a switchem z ustaloną predkością
-        self.addLink(attackerHost1,switch)		#Połączenie między hostami a switchem.
+        self.addLink(wwwServer,switch,bw=10)	#Połączenie między serwerem WWW a przełącznikiem z ustaloną predkością
+        self.addLink(attackerHost1,switch)		#Połączenie między klientami a przełącznikiem
         self.addLink(attackerHost2,switch)
         self.addLink(attackerHost3,switch)
         self.addLink(clientHost1,switch)
@@ -90,30 +90,30 @@ topos = { 'mytopo_ddos': ( lambda: MyTopo_ddos() ) }</pre>
         </section>
         <section class="js-section">
           <h3 class="section__title">Symulacja</h3>
-		  <p>1)Następnie proszę uruchomić środowisko Mininet ze zdefiniowaną we wcześniejszym punkcie topologią wskazując, że wykorzystany będzie zewnętrzny kontroler.<br><br>
+		  <p>1)Uruchomiono środowisko Mininet ze zdefiniowaną we wcześniejszym punkcie topologią. Wskazano wykorzystanie zewnętrznego kontrolera.<br><br>
 		  <code class="tab__pane active linux">$  sudo mn --custom DDoS_mininet_topology.py --topo mytopo_ddos --link=tc --controller=remote,ip=127.0.0.1,port=6653</code>
 		  <p>2)W tym momencie została zbudowana topologia testowa.
         <!-- Place your demo code here -->
 				<img src="testowa_topo.png" alt="Smiley face">
-          <p>3)Następnie można zasymulować atak włączając konsolę xterm oraz na serwerze www włączając iperfa jako serwer</p>
-          <p>4) Następnie proszę włączyć konsolę pozostałych hostów wydając polecenia <code class="tab__pane active linux">$ xterm #nazwa_węzła#</code></p>
-		  <p>5) Następnie możemy włączyć iperfa z dużą ilością jednoczesnych połączeń lub Hibernet(https://github.com/All3xJ/Hibernet) aplikację zasypujaca serwer WWW jednoczesnymi połączeniami HTTP. Wtedy dodatkowo bedziemy musieli postawic serwer www poleceniem:
+          <p>3)Następnie można zasymulować atak. Włączono konsolę xterm oraz serwer www poprzez włącznie programu Iperf jako serwer</p>
+          <p>4) Następnie włączono konsolę pozostałych klientów. Wydano polecenia <code class="tab__pane active linux">$ xterm #nazwa_węzła#</code></p>
+		  <p>5) Następnie możemy włączono program Iperf z dużą ilością jednoczesnych połączeń lub Hibernet (https://github.com/All3xJ/Hibernet) - aplikację generujacą dużą ilość jednoczesnych połączeń HTTP to serwera www. Skonfigurowano serwerem poleceniem:
 		  <code class="tab__pane active linux">$ python -m SimpleHTTPServer 80</code>
-		  <p>6)Przy iperf wydajemy polecenia kolejno na serwerze i na kliencie (25 jednoczesnych połączeń):
+		  <p>6)W programie Iperf wydano polecenia kolejno na serwerze i na kliencie (25 jednoczesnych połączeń):
 		  <code class="tab__pane active linux">$ iperf -s</code>
 		  <code class="tab__pane active linux">$ iperf -c -P 25</code>
-		  <p>7)Powinniśmy dostać output na konsoli o zdroppowaniu flowu.
+		  <p>7)W wyniku działania programu otrzymaliśmy informację na konsoli o usunięciu przepływu.
 		  
           <hr />
         </section>
 		        <section class="js-section">
-          <h3 class="section__title">Opisy zmiennych i klas</h3>
-          <p>Projekt posiada dwie główne klasy napisane przez nas w javie. </p>
-		  <p>1)Pierwsza z nich to PacketAnalyzer.java, gdzie wyciągamy zawartości otrzymanych pakietów typu PACKET_IN w sieci oraz na tej podstawie, zliczamy ile przepływów pochodzi z danego adresu IP(funkcja flowCounter). Wykonujemy również funkcję zmniejszającą tenże licznik po upływie odpowiedniej ilości czasu (decrementIPCounter). </p>
+          <h3 class="section__title">Definicja zmiennych i klas</h3>
+          <p>Projekt posiada dwie główne klasy napisane w Javie. </p>
+		  <p>1)Pierwsza z nich to PacketAnalyzer.java, gdzie wyciągana jest zawartość otrzymanych pakietów typu PACKET_IN w sieci. Na tej podstawie, zliczono, ile przepływów pochodzi z danego adresu IP (funkcja flowCounter). Napisano funkcję zmniejszającą ten licznik po upływie odpowiedniej ilości czasu (decrementIPCounter). </p>
 		  <pre style="background-color:#D3D3D3;">
-private int decrementTimer = 40000; //czas w milisekundach, czas do zmniejszenia licznika dla danego flowu o 1
+private int decrementTimer = 40000; //czas w milisekundach, czas do zmniejszenia licznika dla danego przepływu o 1
 		  </pre>
-		  <p>2) Kolejna klasa to DDOS.java, gdzie napisana jest funkcja dropFlow i receive odpowiedzialna za dropowanie danego flowu. Zlicza ona ilość połączeń w danym flowie i jeśli osiągnie dany threshold (singleIPTreshold) dropuje flow. Dodatkowo zaimplementowaliśmy algorytm, który jeśli wykryje atak z wielu hostów to dropuje flow, który ma największy licznik połączeń, aż do momentu w którym suma wszystkich połączeń do serwera nie przekracza bezpiecznego progu (allIPTreshold)
+		  <p>2) Kolejna klasa to DDOS.java, gdzie napisana jest funkcja dropFlow oraz receive odpowiedzialna za usuwanie danego przepływu. Zlicza ona ilość połączeń w danym przepływie i jeśli osiągnie dany threshold (singleIPTreshold) usuwa przepływ. Dodatkowo zaimplementowano algorytm, który jeśli wykryje atak z wielu klientów to usuwa przepływ, który ma największy licznik połączeń, aż do momentu w którym suma wszystkich połączeń do serwera nie przekracza bezpiecznego progu (allIPTreshold)
 		  <p>Poniżej opis zmiennych w tej klasie:
 		  <pre style="background-color:#D3D3D3;">
 private int allIPTreshold = 500; //max counter for all flows at a time. When reached, the flow that has the largest counter is being dropped
