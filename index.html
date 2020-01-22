@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>DDoS Protection - index</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/railscasts.min.css">
+      <link rel="stylesheet" href="scribbler-global.css">
+      <link rel="stylesheet" href="scribbler-landing.css">
+      <link rel="author" href="humans.txt">
+  </head>
+  <body>
+    <nav>
+      <div class="logo"></div>
+      <ul class="menu">
+        <div class="menu__item toggle"><span></span></div>
+        <li class="menu__item"><a href="doc.html" class="link link--dark"><i class="fa fa-book"></i> Dokumentacja</a></li>
+        <li class="menu__item"><a href="https://github.com/radziop/MPT_2019/tree/dev_DDoS" class="link link--dark"><i class="fa fa-github"></i> Github</a></li>
+      </ul>
+    </nav>
+    <div class="hero">
+      <h1 class="hero__title">DDoS Protection - SDN Firewall</h1>
+      <p class="hero__description">Projekt wykonany w ramach zajęć projektowych z przedmiotu "Sieci Sterowane Programowo".</p>
+    </div>
+    <div class="hero__terminal">
+      <pre>
+        <!-- Place your demo code here -->
+        <center><img src="projekt.png" alt="Smiley face"></center>
+      </pre>
+    </div>
+    <div class="wrapper">
+      <div class="installation">
+		<h3 class="section__title">Wymagania wstępne</h3>
+        <div class="tab__container">
+            <code class="tab__pane active linux">*  UBUNTU 16.04</code>
+			 <code class="tab__pane active linux">*  Python 3</code>
+			  <code class="tab__pane active linux">*  Eclipse IDE</code>
+			  <code class="tab__pane active linux">*  Git</code>
+        </div>		
+		 <h3 class="section__title">Instalacja</h3>
+        <div class="tab__container">
+            <code class="tab__pane active linux">$  sudo apt update</code>
+			 <code class="tab__pane active linux">$  sudo apt install ant openjdk-8-jdk</code>
+			  <code class="tab__pane active linux">$  sudo service openvswitch-switch start</code>
+			  <code class="tab__pane active linux">$  sudo update-alternatives --config java</code>
+			  Następnie wybrać z listy zainstalowaną jave 8
+        </div>
+      </div>
+      <div class="callout">
+        <p>Dokumentacja opisująca jak włączyć nasz projekt i zasymulować atak. Opisane są tam też podstawowe klasy i zmienne.</p>
+        <a href="doc.html" class="button--primary">Dokumentacja</a>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="scribbler.js"></script>
+  </body>
+</html>

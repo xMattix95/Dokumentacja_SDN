@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DDoS Protection - Doc</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="scribbler-global.css">
+    <link rel="stylesheet" href="scribbler-doc.css">
+    <link rel="author" href="humans.txt">
+  </head>
+  <body>
+    <div class="doc__bg"></div>
+    <nav class="header">
+      <h1 class="logo">DDoS <span class="logo__thin">Protection Doc</span></h1>
+      <ul class="menu">
+        <div class="menu__item toggle"><span></span></div>
+        <li class="menu__item"><a href="https://github.com/radziop/MPT_2019/tree/dev_DDoS" class="link link--dark"><i class="fa fa-github"></i> Github</a></li>
+        <li class="menu__item"><a href="index.html" class="link link--dark"><i class="fa fa-home"></i> Home</a></li>
+      </ul>
+    </nav>
+    <div class="wrapper">
+      <aside class="doc__nav">
+        <ul>
+          <li class="js-btn selected">Start</li>
+          <li class="js-btn">Symulacja</li>
+		  <li class="js-btn">Opisy zmiennych i klas</li>
+        </ul>
+      </aside>
+      <article class="doc__content">
+        <section class="js-section">
+          <h3 class="section__title">Start</h3>
+          <p>1)Po instalacji środowiska następny krok to pobranie projektu z githuba i przełączenie się na odpowiedni branch.</p>
+		  <code class="tab__pane active linux">$  git clone https://github.com/radziop/MPT_2019.git</code>
+		  <code class="tab__pane active linux">$  git checkout dev_DDoS</code>
+		  <p>2)Następnie musimy uruchomić środowisko Eclipse i utworzyć nowe Workspace i zaimportować projekt.</p>
+		  -File --> Import --> General --> Existing Projects into Workspace<br>
+		  -Kliknąć na Browse obok Select root directory i znaleźć katalog do którego wypakowaliśmy projekt z dev_DDoS.<br>
+		  -W oknie projects zaznaczyć Floodlight<br>
+		  -Kliknąć przycisk Finish a projekt zostanie zaimportowany<br>
+		  <p>3)Następnie musimy zbudować i uruchomić projekt w srodowisku Eclipse</p>
+		  -Z menu na górze --> Run--> Run Configurations<br>
+		  -Prawym przyciskiem myszy wybrać Java Application --> New<br>
+		  -W polu nazwy wpisać FloodlightLaunch<br>
+		  -W polu Project wybrać Floodlight<br>
+		  -W polu Main Class wybrać net.floodlightcontroller.core.Main<br>
+		  -Kliknąć przycisk Apply i Run<br>
+          <h3 class="section__title">Topologia</h3>
+          <div class="code__block code__block--notabs">
+      <pre>
+        <!-- Place your demo code here -->
+       <img src="topologia.png" alt="Smiley face">
+      </pre>
+<pre style="background-color:#D3D3D3;">"""Topology
+One switch, host acting as WWW server, one client host and one DoS attacker host :
+ WWW --- switch --- host --- host
+           --- attacker --- attacker --- attacker
+                 
+to run topology:
+sudo mn --custom DDoS_mininet_topology.py --topo mytopo_ddos --link=tc --controller=remote,ip=127.0.0.1,port=6653
+"""
+from mininet.topo import Topo
+
+class MyTopo_ddos(Topo):
+    #"Simple topology example."
+    def __init__(self):
+        #"Create custom topo."
+        # Initialize topology
+        Topo.__init__(self)
+        # Add hosts and switches
+        wwwServer = self.addHost('www') #SERWER WWW
+        attackerHost1 = self.addHost('ah1') #ATAKUJĄCY 1
+        attackerHost2 = self.addHost('ah2') #ATAKUJĄCY 2
+        attackerHost3 = self.addHost('ah3') #ATAKUJĄCY 3
+        switch = self.addSwitch('s1')		#SWITCH
+        clientHost1 = self.addHost('ch')	#KLIENT 1
+        clientHost2 = self.addHost('ch2')	#KLIENT 2
+        # Add links
+        self.addLink(wwwServer,switch,bw=10)	#Połączenie między serwerem WWW a switchem z ustaloną predkością
+        self.addLink(attackerHost1,switch)		#Połączenie między hostami a switchem.
+        self.addLink(attackerHost2,switch)
+        self.addLink(attackerHost3,switch)
+        self.addLink(clientHost1,switch)
+        self.addLink(clientHost2,switch)
+
+topos = { 'mytopo_ddos': ( lambda: MyTopo_ddos() ) }</pre>
+          </div>
+        </section>
+        <section class="js-section">
+          <h3 class="section__title">Symulacja</h3>
+		  <p>1)Następnie proszę uruchomić środowisko Mininet ze zdefiniowaną we wcześniejszym punkcie topologią wskazując, że wykorzystany będzie zewnętrzny kontroler.<br><br>
+		  <code class="tab__pane active linux">$  sudo mn --custom DDoS_mininet_topology.py --topo mytopo_ddos --link=tc --controller=remote,ip=127.0.0.1,port=6653</code>
+		  <p>2)W tym momencie została zbudowana topologia testowa.
+        <!-- Place your demo code here -->
+				<img src="testowa_topo.png" alt="Smiley face">
+          <p>3)Następnie można zasymulować atak włączając konsolę xterm oraz na serwerze www włączając iperfa jako serwer</p>
+          <p>4) Następnie proszę włączyć konsolę pozostałych hostów wydając polecenia <code class="tab__pane active linux">$ xterm #nazwa_węzła#</code></p>
+		  <p>5) Następnie możemy włączyć iperfa z dużą ilością jednoczesnych połączeń lub Hibernet(https://github.com/All3xJ/Hibernet) aplikację zasypujaca serwer WWW jednoczesnymi połączeniami HTTP. Wtedy dodatkowo bedziemy musieli postawic serwer www poleceniem:
+		  <code class="tab__pane active linux">$ python -m SimpleHTTPServer 80</code>
+		  <p>6)Przy iperf wydajemy polecenia kolejno na serwerze i na kliencie (25 jednoczesnych połączeń):
+		  <code class="tab__pane active linux">$ iperf -s</code>
+		  <code class="tab__pane active linux">$ iperf -c -P 25</code>
+		  <p>7)Powinniśmy dostać output na konsoli o zdroppowaniu flowu.
+		  
+          <hr />
+        </section>
+		        <section class="js-section">
+          <h3 class="section__title">Opisy zmiennych i klas</h3>
+          <p>Projekt posiada dwie główne klasy napisane przez nas w javie. </p>
+		  <p>1)Pierwsza z nich to PacketAnalyzer.java, gdzie wyciągamy zawartości otrzymanych pakietów typu PACKET_IN w sieci oraz na tej podstawie, zliczamy ile przepływów pochodzi z danego adresu IP(funkcja flowCounter). Wykonujemy również funkcję zmniejszającą tenże licznik po upływie odpowiedniej ilości czasu (decrementIPCounter). </p>
+		  <pre style="background-color:#D3D3D3;">
+private int decrementTimer = 40000; //czas w milisekundach, czas do zmniejszenia licznika dla danego flowu o 1
+		  </pre>
+		  <p>2) Kolejna klasa to DDOS.java, gdzie napisana jest funkcja dropFlow i receive odpowiedzialna za dropowanie danego flowu. Zlicza ona ilość połączeń w danym flowie i jeśli osiągnie dany threshold (singleIPTreshold) dropuje flow. Dodatkowo zaimplementowaliśmy algorytm, który jeśli wykryje atak z wielu hostów to dropuje flow, który ma największy licznik połączeń, aż do momentu w którym suma wszystkich połączeń do serwera nie przekracza bezpiecznego progu (allIPTreshold)
+		  <p>Poniżej opis zmiennych w tej klasie:
+		  <pre style="background-color:#D3D3D3;">
+private int allIPTreshold = 500; //max counter for all flows at a time. When reached, the flow that has the largest counter is being dropped
+private int singleIPTreshold = 20; //max counter for given flow. When reached, the flow is being dropped 
+private int idle = 120; //in seconds, idleTimeout that will be set for flows destined to be dropped
+private int hard = 1200; //in seconds, hardTimeout that will be set for flows destined to be dropped
+		  </pre>
+          <hr />
+        </section>
+      </article>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="scribbler.js"></script>
+  </body>
+</html>
